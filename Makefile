@@ -1,5 +1,5 @@
 CXX=clang++
-CFXXLAGS=-Wno-macro-redefined -Wall
+CFXXLAGS=-std=c++2a -Wno-macro-redefined -Wall
 LDFLAGS=-L$(BREW_PREFIX)/lib -lglfw -framework OpenGL -DGL_SILENCE_DEPRECATION
 
 BREW_PREFIX=$(shell brew --prefix)
@@ -13,5 +13,7 @@ SRC = $(shell find src -name '*.cpp' -o -name '*.c')
 
 all:
 	$(CXX) -o $(TARGET) $(SRC) $(INCLUDES) $(LDFLAGS) $(CFXXLAGS)
+run:
+	./$(TARGET)
 clean:
 	$(RM) $(TARGET)
