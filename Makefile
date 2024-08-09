@@ -5,7 +5,7 @@ LDFLAGS=-L$(BREW_PREFIX)/lib -lglfw -framework OpenGL -DGL_SILENCE_DEPRECATION
 BREW_PREFIX=$(shell brew --prefix)
 PROJ_DIR=$(CURDIR)
 
-TARGET=main
+TARGET=build/main
 
 INCLUDES=-I$(BREW_PREFIX)/include -I$(PROJ_DIR)/include
 
