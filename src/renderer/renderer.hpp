@@ -24,6 +24,7 @@ public:
 	void start(unsigned int shaderProgram);
 	void addVertex(float x, float y, float z);
 	void addFace(size_t x, size_t y, size_t z);
+	void addCircle(float x, float y, float z, float r);
 	void prerenderShapes();
 };
 
