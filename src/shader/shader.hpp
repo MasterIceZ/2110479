@@ -6,6 +6,13 @@
 
 #include <string>
 
-unsigned int createShaderProgram(const std::string &vertexPath, const std::string &fragmentPath);
+class shader_t {
+public:
+	unsigned int shaderProgram;
+	unsigned int vertexShader;
+	unsigned int fragmentShader;
+
+	shader_t(const std::string &vertexPath, const std::string &fragmentPath);
+};
 
 #endif

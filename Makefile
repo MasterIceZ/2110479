@@ -9,7 +9,7 @@ TARGET=build/main
 
 INCLUDES=-I$(BREW_PREFIX)/include -I$(PROJ_DIR)/include
 
-SRC = $(shell find src -name '*.cpp' -o -name '*.c')
+SRC=$(shell find src -name '*.cpp' -o -name '*.c')
 
 all:
 	$(CXX) -o $(TARGET) $(SRC) $(INCLUDES) $(LDFLAGS) $(CFXXLAGS)

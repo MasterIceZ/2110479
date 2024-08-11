@@ -44,66 +44,77 @@ renderer_t::renderer_t(size_t width, size_t height, std::string app_name) {
 
 		exit(-1);
 	}
+
+	sz = (size_t) 0;
 }
 
-void renderer_t::addVertex(float x, float y, float z) {
-	vertices.emplace_back(x, y, z);
-	
-	verticesBuffer.emplace_back(x);
-	verticesBuffer.emplace_back(y);
-	verticesBuffer.emplace_back(z);
-}
-
-void renderer_t::addFace(size_t x, size_t y, size_t z) {
-	if(x >= vertices.size() || y >= vertices.size() || z >= vertices.size()) {
-		std::cerr << "Invalid Vertex index for Face" << std::endl;
-
-		exit(-1);
-	}	
-	faces.emplace_back(x, y, z);
-
-	facesBuffer.emplace_back(static_cast<unsigned int> (x));
-	facesBuffer.emplace_back(static_cast<unsigned int> (y));
-	facesBuffer.emplace_back(static_cast<unsigned int> (z));
+void renderer_t::addShader(const std::string& vertexPath, const std::string& fragmentPath) {
+	shader_container.emplace_back(vertexPath, fragmentPath);
+	vertex_container.emplace_back();
+	sz = sz + 1;
 }
 
 void renderer_t::prerenderShapes() {
 	GLenum err;
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+	for(int i=0; i<sz; ++i) {
+		glGenVertexArrays(1, &vertex_container[i].VAO);
+		glGenBuffers(1, &vertex_container[i].VBO);
+		glGenBuffers(1, &vertex_container[i].EBO);
 
-    glBindVertexArray(VAO);
+		glBindVertexArray(vertex_container[i].VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, verticesBuffer.size() * sizeof(float), verticesBuffer.data(), GL_STATIC_DRAW);
-	err = glGetError();
-	if(err != GL_NO_ERROR) {
-		std::cerr << "Error in glBufferData (VBO): " << err << std::endl;
+		glBindBuffer(GL_ARRAY_BUFFER, vertex_container[i].VBO);
+		glBufferData(GL_ARRAY_BUFFER, vertex_container[i].vertices_buffer.size() * sizeof(float), vertex_container[i].vertices_buffer.data(), GL_STATIC_DRAW); 
+		err = glGetError();
+		if(err != GL_NO_ERROR) {
+			std::cerr << "Error in glBufferData (VBO): " << err << std::endl;
+
+			exit(-1);
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertex_container[i].EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertex_container[i].faces_buffer.size() * sizeof(unsigned int), vertex_container[i].faces_buffer.data(), GL_STATIC_DRAW);
+		err = glGetError();
+		if(err != GL_NO_ERROR) {
+			std::cerr << "Error in glBufferData (EBO): " << err << std::endl;
+
+			exit(-1);
+		}
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
+		glEnableVertexAttribArray(0);
+		err = glGetError();
+		if(err != GL_NO_ERROR) {
+		   std::cerr << "Error in glVertexAttribPointer: " << err << std::endl;
+
+		   exit(-1);
+		}	   
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glBindVertexArray(0);
+	}
+}
+
+size_t renderer_t::size() {
+	return sz;
+}
+
+shader_t& renderer_t::getShaderContainer(size_t idx) {
+	if(idx >= sz) {
+		std::cerr << "Shader Container index out of bound" << std::endl;
 
 		exit(-1);
 	}
+	return shader_container[idx];
+}
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, facesBuffer.size() * sizeof(unsigned int), facesBuffer.data(), GL_STATIC_DRAW);
-	err = glGetError();
-	if(err != GL_NO_ERROR) {
-		std::cerr << "Error in glBufferData (EBO): " << err << std::endl;
-
-		exit(-1);
-	}
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
-	err = glGetError();
-	if(err != GL_NO_ERROR) {
-		std::cerr << "Error in glVertexAttribPointer: " << err << std::endl;
+vertex_container_t& renderer_t::getVertexContainer(size_t idx) {
+	if(idx >= sz) {
+		std::cerr << "Vertex Container index out of bound" << std::endl;
 
 		exit(-1);
 	}
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
-
-    glBindVertexArray(0); 
+	return vertex_container[idx];
 }

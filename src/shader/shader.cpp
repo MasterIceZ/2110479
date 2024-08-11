@@ -81,14 +81,12 @@ unsigned int loadShaderProgram(unsigned int vertexShader, unsigned int fragmentS
 	return shaderProgram;
 }
 
-unsigned int createShaderProgram(const std::string& vertexPath, const std::string& fragmentPath) {
+shader_t::shader_t(const std::string& vertexPath, const std::string &fragmentPath) {
 	std::string vertexShaderSource = readShaderSource(vertexPath);
 	std::string fragmentShaderSource = readShaderSource(fragmentPath);
 
-	unsigned int vertexShader = loadShaderVertex(vertexShaderSource);
-	unsigned int fragmentShader = loadShaderFragment(fragmentShaderSource);	
+	vertexShader = loadShaderVertex(vertexShaderSource);
+	fragmentShader = loadShaderFragment(fragmentShaderSource);
 
-	unsigned int shaderProgram = loadShaderProgram(vertexShader, fragmentShader);
-	
-	return shaderProgram;
+	shaderProgram = loadShaderProgram(vertexShader, fragmentShader);
 }

@@ -1,16 +1,14 @@
 #include <cmath>
 
-#include "../renderer.hpp"
+#include "../vertex_container.hpp"
 
-const int CIRCLE_SEGMENT = 100;
-
-void renderer_t::addCircle(float x, float y, float z, float r) {
-	float angle_step = 2.0f * acos(-1) / CIRCLE_SEGMENT;
+void vertex_container_t::addCircle(float x, float y, float z, float r, size_t segment) {
+	float angle_step = 2.0f * acos(-1) / segment;
 
 	addVertex(x, y, z);
 	int center_index = vertices.size() - 1;
 
-	for(int i=0; i<=CIRCLE_SEGMENT; ++i) {
+	for(int i=0; i<=segment; ++i) {
 		float cur_angle = i * angle_step;
 		float cur_x = r * cos(cur_angle) + x;
 		float cur_y = r * sin(cur_angle) + y;
