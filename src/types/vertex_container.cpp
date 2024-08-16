@@ -11,9 +11,18 @@ void vertex_container_t::addVertex(float x, float y, float z) {
 	vertices_buffer.emplace_back(z);
 }
 
+void vertex_container_t::addVertex(vertex_t a) {
+	vertices.emplace_back(a);
+
+	vertices_buffer.emplace_back(a.getX());
+	vertices_buffer.emplace_back(a.getY());
+	vertices_buffer.emplace_back(a.getZ());
+}
+
 void vertex_container_t::addFace(size_t x, size_t y, size_t z) {
 	if(x >= vertices.size() || y >= vertices.size() || z >= vertices.size()) {
 		std::cerr << "Invalid Vertex index for Face" << std::endl;
+		std::cerr << "Trying to add: (" << x << ", " << y << ", " << z << ")" << std::endl;
 
 		exit(-1);
 	}	

@@ -18,7 +18,9 @@ public:
 	unsigned int VAO, VBO, EBO;
 
 	void addVertex(float x, float y, float z);
+	void addVertex(vertex_t a);
 	void addFace(size_t x, size_t y, size_t z);
+	void addTriangle(vertex_t a, vertex_t b, vertex_t c);
 	void addCircle(float x, float y, float z, float r, size_t s=100);
 	
 	size_t size();

@@ -14,7 +14,7 @@ std::string readShaderSource(const std::string& filename) {
 	if(!file.is_open()) {
 		std::cerr << "Cannot open shader file: " << filename << std::endl;
 
-		exit(1);
+		exit(-1);
 	}
 
 	std::stringstream buffer;
@@ -89,4 +89,8 @@ shader_t::shader_t(const std::string& vertexPath, const std::string &fragmentPat
 	fragmentShader = loadShaderFragment(fragmentShaderSource);
 
 	shaderProgram = loadShaderProgram(vertexShader, fragmentShader);
+}
+
+void shader_t::use() {
+	glUseProgram(shaderProgram);
 }

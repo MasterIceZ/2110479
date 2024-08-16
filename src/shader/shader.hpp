@@ -13,6 +13,7 @@ public:
 	unsigned int fragmentShader;
 
 	shader_t(const std::string &vertexPath, const std::string &fragmentPath);
+	void use();
 };
 
 #endif
